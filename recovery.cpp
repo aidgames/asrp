@@ -36,6 +36,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cstddef>
 #include <memory>
 #include <string>
 #include <vector>
@@ -736,6 +737,26 @@ static std::string browse_directory(const std::string& path, Device* device) {
 
   // Unreachable.
 }
+static Device::BuiltinAction rebootsel(Device* device){
+  const char* rebootitems[] = {
+    "Back to menu",
+    "Recovery",
+    "System",
+    "Bootloader",
+    "Power off",
+    NULL
+  };
+  const Device::BuiltinAction actions[] = {
+    Device::NO_ACTION,
+    Device::REBOOT_RECOVERY,
+    Device::REBOOT,
+    Device::REBOOT_BOOTLOADER,
+    Device::SHUTDOWN,
+  };
+  const char* headers[] = { "Reboot", NULL};
+  int rebootAction = get_menu_selection(headers, rebootitems, true, 0, device);
+  return actions[rebootAction];
+}
 
 static void wiper(Device* device) {
     struct fstab* fs_table = fs_mgr_read_fstab_default();
@@ -1171,6 +1192,7 @@ static Device::BuiltinAction prompt_and_wait(Device* device, int status) {
     switch (chosen_action) {
       case Device::NO_ACTION:
         break;
+      
 
       case Device::REBOOT:
       case Device::SHUTDOWN:
@@ -1188,6 +1210,7 @@ static Device::BuiltinAction prompt_and_wait(Device* device, int status) {
           return Device::NO_ACTION;
         }
         break;
+
 
       case Device::WIPE_CACHE:
         wipe_cache(ui->IsTextVisible(), device);
@@ -1253,6 +1276,11 @@ static Device::BuiltinAction prompt_and_wait(Device* device, int status) {
             ui->Print("Mounted /system.\n");
           }
         }
+        break;
+      
+      case Device::REBOOTSEL:
+        Device::BuiltinAction action = rebootsel(device);
+        if (action!=Device::NO_ACTION) return action;
         break;
     }
   }

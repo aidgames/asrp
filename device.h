@@ -68,7 +68,8 @@ class Device {
     RUN_GRAPHICS_TEST = 11,
     RUN_LOCALE_TEST = 12,
     REBOOT_RECOVERY = 13,
-    WIPER = 14
+    WIPER = 14,
+    REBOOTSEL = 15,
   };
 
   // Return the list of menu items (an array of strings, NULL-terminated). The menu_position passed

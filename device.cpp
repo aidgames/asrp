@@ -17,9 +17,7 @@
 #include "device.h"
 
 static const char* MENU_ITEMS[] = {
-  "Reboot system now",
-  "Reboot recovery",
-  "Reboot to bootloader",
+  "Reboot",
   "Apply update from ADB",
   "Apply update from SD card",
   "Wipe data/factory reset",
@@ -31,14 +29,11 @@ static const char* MENU_ITEMS[] = {
   "View recovery logs",
   "Run graphics test",
   "Run locale test",
-  "Power off",
   nullptr,
 };
 
 static const Device::BuiltinAction MENU_ACTIONS[] = {
-  Device::REBOOT,
-  Device::REBOOT_RECOVERY,
-  Device::REBOOT_BOOTLOADER,
+  Device::REBOOTSEL,
   Device::APPLY_ADB_SIDELOAD,
   Device::APPLY_SDCARD,
   Device::WIPE_DATA,
@@ -50,7 +45,6 @@ static const Device::BuiltinAction MENU_ACTIONS[] = {
   Device::VIEW_RECOVERY_LOGS,
   Device::RUN_GRAPHICS_TEST,
   Device::RUN_LOCALE_TEST,
-  Device::SHUTDOWN,
 };
 
 static_assert(sizeof(MENU_ITEMS) / sizeof(MENU_ITEMS[0]) ==
