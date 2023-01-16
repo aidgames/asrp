@@ -434,7 +434,11 @@ void ScreenRecoveryUI::draw_screen_locked() {
     int x = kMarginWidth + kMenuIndent;
 
     SetColor(INFO);
+#ifndef RECOVERY_TITLE
     y += DrawTextLine(x, y, "Android Recovery", true);
+#else
+    y += DrawTextLine(x, y, RECOVERY_TITLE, true);
+#endif    
     std::string recovery_fingerprint =
         android::base::GetProperty("ro.bootimage.build.fingerprint", "");
     for (const auto& chunk : android::base::Split(recovery_fingerprint, ":")) {

@@ -23,6 +23,8 @@
 
 #include <string>
 
+#define RECOVERY_TITLE "Android Simple Recovery Project"
+
 // Abstract class for controlling the user interface during recovery.
 class RecoveryUI {
  public:

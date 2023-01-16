@@ -85,7 +85,11 @@ void WearRecoveryUI::draw_screen_locked() {
       std::string recovery_fingerprint =
           android::base::GetProperty("ro.bootimage.build.fingerprint", "");
       SetColor(HEADER);
-      y += DrawTextLine(x + 4, y, "Android Recovery", true);
+#ifndef RECOVERY_TITLE
+    y += DrawTextLine(x+4, y, "Android Recovery", true);
+#else
+    y += DrawTextLine(x+4, y, RECOVERY_TITLE, true);
+#endif
       for (auto& chunk : android::base::Split(recovery_fingerprint, ":")) {
         y += DrawTextLine(x + 4, y, chunk.c_str(), false);
       }
