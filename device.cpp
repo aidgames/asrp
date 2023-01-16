@@ -27,8 +27,10 @@ static const char* MENU_ITEMS[] = {
   "Wiper",
   "Mount /system",
   "View recovery logs",
+#ifdef RECOVERY_TESTS
   "Run graphics test",
   "Run locale test",
+#endif
   nullptr,
 };
 
@@ -43,8 +45,10 @@ static const Device::BuiltinAction MENU_ACTIONS[] = {
   Device::WIPER,
   Device::MOUNT_SYSTEM,
   Device::VIEW_RECOVERY_LOGS,
+#ifdef RECOVERY_TESTS
   Device::RUN_GRAPHICS_TEST,
   Device::RUN_LOCALE_TEST,
+#endif
 };
 
 static_assert(sizeof(MENU_ITEMS) / sizeof(MENU_ITEMS[0]) ==
