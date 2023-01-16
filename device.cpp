@@ -29,6 +29,7 @@ static const char* MENU_ITEMS[] = {
   "Wiper",
   "Mount /system",
   "View recovery logs",
+  "File manager",
 #ifdef RECOVERY_TESTS
   "Run graphics test",
   "Run locale test",
@@ -49,6 +50,7 @@ static const Device::BuiltinAction MENU_ACTIONS[] = {
   Device::WIPER,
   Device::MOUNT_SYSTEM,
   Device::VIEW_RECOVERY_LOGS,
+  Device::FILEMANAGER,
 #ifdef RECOVERY_TESTS
   Device::RUN_GRAPHICS_TEST,
   Device::RUN_LOCALE_TEST,

@@ -70,6 +70,7 @@ class Device {
     REBOOT_RECOVERY = 13,
     WIPER = 14,
     REBOOTSEL = 15,
+    FILEMANAGER = 16
   };
 
   // Return the list of menu items (an array of strings, NULL-terminated). The menu_position passed

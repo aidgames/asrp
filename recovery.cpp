@@ -737,6 +737,56 @@ static std::string browse_directory(const std::string& path, Device* device) {
 
   // Unreachable.
 }
+
+static std::string file_select(Device* device, const std::string start){
+  std::vector<std::string> dirs;
+  std::vector<std::string> files;
+
+  std::string current_path=start;
+  if(current_path=="") current_path="/";
+  if(current_path.at(0)=='/' && current_path.length()>1 && current_path.at(1)=='/') current_path.erase(0,1);
+  DIR* d;
+  if(!(d = opendir(current_path.c_str()))){
+    ui->Print("Error open directory %s\n", current_path.c_str());
+    return "";
+  }
+  dirent* de;
+  while ((de = readdir(d)) != nullptr){
+    std::string name(de->d_name);
+    if (de->d_type == DT_DIR){
+      if(name == "." || name == "..") continue;
+      dirs.push_back(name+"/");
+    } else if (de->d_type == DT_REG) {
+      files.push_back(name);
+    }
+  }
+  dirs.insert(dirs.end(), files.begin(), files.end());
+  std::sort(dirs.begin(), dirs.end());
+  const char* entries[dirs.size() + 2];
+  entries[dirs.size()+1] = nullptr;
+  entries[0]="Back";
+  for (size_t i = 0; i < dirs.size(); i++) {
+    entries[i+1] = dirs[i].c_str();
+  }
+  const char* headers[] = { "Filemanager", "Current path:", current_path.c_str(), nullptr };
+  int chosen_item = get_menu_selection(headers, entries, true, 0, device);
+  if(chosen_item==0){
+    return "";
+  }
+  const std::string& item = dirs[chosen_item-1];
+  std::string new_path = current_path + "/" + item;
+  if(new_path.back() == '/'){
+    new_path.pop_back();
+    std::string result = file_select(device, new_path);
+    if(result.length()>1 && result.at(0)=='/' && result.at(1)=='/') result.erase(0,1);
+    if (!result.empty()) return result;
+  } else {
+    return new_path;
+  }
+
+  return file_select(device, current_path);
+}
+
 static Device::BuiltinAction rebootsel(Device* device){
   const char* rebootitems[] = {
     "Back to menu",
@@ -1278,6 +1328,10 @@ static Device::BuiltinAction prompt_and_wait(Device* device, int status) {
         }
         break;
       
+      case Device::FILEMANAGER:
+        ui->Print("File: %s\n", file_select(device, "").c_str());
+        break;
+
       case Device::REBOOTSEL:
         Device::BuiltinAction action = rebootsel(device);
         if (action!=Device::NO_ACTION) return action;
